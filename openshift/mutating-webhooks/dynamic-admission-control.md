@@ -267,11 +267,9 @@ There are many use cases where using an `MutatingAdmissionWebhook` makes managin
 Original inspiration and code forked from: [](https://medium.com/ibm-cloud/diving-into-kubernetes-mutatingadmissionwebhook-6ef3c5695f74)
 
 #### Additional Resources
- - [](https://kubernetes.io/docs/reference/access-authn-authz/extensible-admission-controllers)
- - [](https://kubernetes.io/docs/reference/access-authn-authz/admission-controllers/#mutatingadmissionwebhook)
- - [](https://docs.openshift.com/container-platform/4.5/architecture/admission-plug-ins.html#admission-plug-ins-default_admission-plug-ins)
- - [](https://docs.openshift.com/container-platform/4.5/nodes/scheduling/nodes-scheduler-taints-tolerations.html#nodes-scheduler-taints-tolerations-about-taintBasedEvictions_nodes-scheduler-taints-tolerations)
- - [](https://www.openshift.com/blog/a-podpreset-based-webhook-admission-controller)
-
-
+ - https://kubernetes.io/docs/reference/access-authn-authz/extensible-admission-controllers/
+ - https://kubernetes.io/docs/reference/access-authn-authz/admission-controllers/#mutatingadmissionwebhook 
+ - https://docs.openshift.com/container-platform/4.5/architecture/admission-plug-ins.html#admission-plug-ins-default_admission-plug-ins
+ - https://docs.openshift.com/container-platform/4.5/nodes/scheduling/nodes-scheduler-taints-tolerations.html#nodes-scheduler-taints-tolerations-about-taintBasedEvictions_nodes-scheduler-taints-tolerations
+ - https://www.openshift.com/blog/a-podpreset-based-webhook-admission-controller 
 
