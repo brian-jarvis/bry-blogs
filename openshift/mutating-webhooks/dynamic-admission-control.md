@@ -272,8 +272,3 @@ Original inspiration and code forked from: [](https://medium.com/ibm-cloud/divin
  - https://docs.openshift.com/container-platform/4.5/architecture/admission-plug-ins.html#admission-plug-ins-default_admission-plug-ins
  - https://docs.openshift.com/container-platform/4.5/nodes/scheduling/nodes-scheduler-taints-tolerations.html#nodes-scheduler-taints-tolerations-about-taintBasedEvictions_nodes-scheduler-taints-tolerations
  - https://www.openshift.com/blog/a-podpreset-based-webhook-admission-controller 
-
-![](./images/test_plugin_zenburn.svg)
-
-embded
-<script id="asciicast-379637" src="https://asciinema.org/a/379637.js?" data-theme="solarized-dark" data-preload=1 async></script>
