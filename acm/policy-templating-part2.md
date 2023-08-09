@@ -14,13 +14,13 @@ In part two of this series I will look at more advanced template functionality a
   - [Review Governance Policy Templates and template functions](https://access.redhat.com/documentation/en-us/red_hat_advanced_cluster_management_for_kubernetes/2.7/html-single/governance/index#support-templates-in-config-policies)
 
 ## Validate cluster state
-RHACM Policies are typically viewed as the mechanism to apply day-2 configuration to a cluster.  This could be configuring authentication, creating infra nodes and configuring cluster workloads on them, installing operators along with a number of other day-2 configurations.  In part one of this series we looked at using templating to make these configurations more dynamic and the policies easier to maintain.
+RHACM Policies are typically viewed as the mechanism to apply day-2 configuration to a cluster. This could be configuring authentication, creating infra nodes and configuring cluster workloads on them, installing operators along with a number of other day-2 configurations. In part one of this series we looked at using templating to make these configurations more dynamic and the policies easier to maintain.
 
-A policy to install an Operator using the Operator Lifecycle Manager (OLM) might consist of a `Namespace` definition, an `OperatorGroup` and a `Subscription`.  Applying these three objects will result in `OLM` installing the specified Operator.  Once those three objects exist the `Policy` will show as status `compliant`.  Compliance is only an indicator the objects have been created as specified and not that the operator has successfully installed and is running.
+A policy to install an Operator using the Operator Lifecycle Manager (OLM) might consist of a `Namespace` definition, an `OperatorGroup` and a `Subscription`. Applying these three objects will result in `OLM` installing the specified Operator. Once those three objects exist the `Policy` will show as status `compliant`. Compliance is only an indicator the objects have been created as specified and not that the operator has successfully installed and is running.
 
-RHACM Policies have the capability to be in an "Inform" state where the Policy can be extended to validate the state of objects in the cluster.  This additional functionality opens a very powerful set of tools setting RHACM apart from other GitOps tooling to manage clusters.  As a cluster manager you can ensure all components are healthy across your entire fleet of clusters by viewing the status in RHACM.  
+RHACM Policies have the capability to be in an "Inform" state where the Policy can be extended to validate the state of objects in the cluster. This additional functionality opens a very powerful set of tools setting RHACM apart from other GitOps tooling to manage clusters. As a cluster manager you can ensure all components are healthy across your entire fleet of clusters by viewing the status in RHACM. 
 
-Let's review how we can implement this when installing an Operator like OpenShift GitOps.  In addition to the Policy to enforce creating the Subscription we can add a Policy to verify the health of the operator.  The example below will validate the health of the Subscription, the Operator Deployment, and the ArgoCD instance itself.
+Let's review how we can implement this when installing an Operator like OpenShift GitOps. In addition to the Policy to enforce creating the Subscription we can add a Policy to verify the health of the operator. The example below will validate the health of the Subscription, the Operator Deployment, and the ArgoCD instance itself.
 ~~~
 apiVersion: policy.open-cluster-management.io/v1
 kind: Policy
@@ -83,9 +83,9 @@ spec:
         severity: high
 ~~~
 
-We can now not only determine the objects required were created to install the operator, but the operator is installed and running successfully.  
+We can now not only determine the objects required were created to install the operator, but the operator is installed and running successfully. When combined with [Policy Dependencies](https://access.redhat.com/documentation/en-us/red_hat_advanced_cluster_management_for_kubernetes/2.8/html-single/governance/index#policy-dependencies) we can now ensure the Operator requirements are met before creating CustomResources.
 
-RHACM inform policies can be used to identify other cluster issues, not just the health of our Day-2 configurations.  Common cluster health states such as [kcs-645901](https://access.redhat.com/solutions/6459071) can be identified in Policies to make cluster administrators aware of potential problems before users are impacted.  This example would become non-compliant if the openshift-marketplace Job or InstallPlan contain the indicated status conditions.  An upcoming addition to this series we will look at how we can use policies to automatically correct issues such as this.
+RHACM inform policies can be used to identify other cluster issues, not just the health of our Day-2 configurations. Common cluster health states such as [kcs-645901](https://access.redhat.com/solutions/6459071) can be identified in Policies to make cluster administrators aware of potential problems before users are impacted. This example would become non-compliant if the openshift-marketplace Job or InstallPlan contain the indicated status conditions. An upcoming addition to this series we will look at how we can use policies to automatically correct issues such as this.
 ~~~
 ---
 kind: Job
@@ -127,11 +127,11 @@ Note for the above example to work you need to create a PolicyGenerator configur
 
 
 ## Enabling new capabilities with object-templates-raw
-A new capability was added to `ConfigurationPolicies` in RHACM 2.7.2 and 2.8; [objects-template-raw](https://access.redhat.com/documentation/en-us/red_hat_advanced_cluster_management_for_kubernetes/2.8/html-single/governance/index#raw-object-template-processing).  This new feature allows you to use `if statements`, assign values to variables, and make use of ranges.
+A new capability was added to `ConfigurationPolicies` in RHACM 2.7.2 and 2.8; [objects-template-raw](https://access.redhat.com/documentation/en-us/red_hat_advanced_cluster_management_for_kubernetes/2.8/html-single/governance/index#raw-object-template-processing). This new feature allows you to use `if statements`, assign values to variables, and make use of ranges.
 
-All of the templating we have discussed to this point has been to return a string or a single value.  `object-templates-raw` supports advanced templating use-cases allowing a policy to generate YAML string representation.
+All of the templating we have discussed to this point has been to return a string or a single value. `object-templates-raw` supports advanced templating use-cases by allowing a policy to generate YAML string representation.
 
-In part-1 we looked at setting the default value for the number of replicas on the `IngressController` based on the number of infra nodes found.  But we did not configure the nodeSelector or tolerations to support running on the infra nodes.  Lets take a look at how using raw templates allows us to fully solve this.
+Continuing the example from part one we looked at setting the default value for the number of replicas on the `IngressController` based on the number of infra nodes found. But we did not configure the nodeSelector or tolerations to support running on the infra nodes. Let's take a look at how using raw templates allows us to fully solve this.
 ~~~
 apiVersion: policy.open-cluster-management.io/v1
 kind: ConfigurationPolicy
@@ -165,7 +165,7 @@ spec:
 
 When the policy is applied to the cluster, if there are zero infra nodes (`$infraCount == 0`) the whole block for the `spec.nodePlacement` will not be part of the IngressController configuration. Once infra nodes are added to the cluster the policy will reevaluate and the configuration will be updated.
 
-The raw templating also allows you to create more advanced objects where some processing of information needs to be completed before generating the `objectDefinition`.  Here we are creating the multiline string for the Thanos configuration using information from the OpenShift Data Foundation configured on the cluster.  The Thanos configuration is then processed and encoded to be stored in the thanos.yaml key of the secret generated by the policy.
+The raw templating also allows you to create more advanced objects where some processing of information needs to be completed before generating the `objectDefinition`. Here we are creating the multiline string for the Thanos configuration using information from the OpenShift Data Foundation configured on the cluster. The Thanos configuration is then processed and encoded to be stored in the thanos.yaml key of the secret generated by the policy.
 ~~~
 apiVersion: policy.open-cluster-management.io/v1
 kind: ConfigurationPolicy
@@ -206,9 +206,9 @@ spec:
 ~~~
 
 ## Using range to generator objects in policies
-The `range` [function](https://pkg.go.dev/text/template) creates a loop on an array, slice, map, or channel.  We can use this to loop through a list of either static values, a return from the lookup function, or parts of an object such as the labels on a Deployment.  Each iteration of the loop can be assigned to a variable using the format `{{ range $myItem := $list }} printf $myItem.property {{ end }}` a dot (.) context variable using the format `{{ range $list }} printf .property {{ end }}` or `{{ range $myItem := $list }} printf $myItem.property {{ else }} printf "empty list" {{ end }}` which will execute the else if the $list is empty.
+The `range` [function](https://pkg.go.dev/text/template) creates a loop on an array, slice, map, or channel. We can use this to loop through a list of either static values, a return from the lookup function, or parts of an object such as the labels on a Deployment. Each iteration of the loop can be assigned to a variable using the format `{{ range $myItem := $list }} printf $myItem.property {{ end }}` a dot (.) context variable using the format `{{ range $list }} printf .property {{ end }}` or `{{ range $myItem := $list }} printf $myItem.property {{ else }} printf "empty list" {{ end }}` which will execute the else if the $list is empty.
 
-This can be very useful for creating policies that would generate many objectDefinitions such as creating a `ConfigMap` for each namespace that meets a set requirement.  In this example we are looping through all `Pods` in the "portworx" namespace, identifying failed pods with the name containing "kvdb".  Pods found matching this condition will be removed from the cluster.
+This can be very useful for creating policies that would generate many objectDefinitions such as creating a `ConfigMap` for each namespace that meets a set requirement. In this example we are looping through all `Pods` in the "portworx" namespace, identifying failed pods with the name containing "kvdb". Pods found matching this condition will be removed from the cluster.
 ~~~
 apiVersion: policy.open-cluster-management.io/v1
 kind: ConfigurationPolicy
@@ -234,7 +234,7 @@ spec:
     {{- end }}
 ~~~
 
-Expanding our earlier example checking the health of OpenShift GitOps instances we can make use of range to check all `ArgoCD` instances on a cluster, along with a range of label selectors to validate each `Deployment` ensuring all components are healthy and contain the expected number of replicas.
+Expanding our earlier example checking the health of OpenShift GitOps instances we can make use of range to check all `ArgoCD` instances on a cluster, along with a range on a list of label selectors to validate each `Deployment` ensuring all components are healthy and contain the expected number of replicas.
 ~~~
 apiVersion: policy.open-cluster-management.io/v1
 kind: ConfigurationPolicy
