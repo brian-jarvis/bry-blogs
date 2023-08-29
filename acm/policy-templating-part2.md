@@ -160,7 +160,7 @@ spec:
             - operator: Exists
               key: node-role.kubernetes.io/infra
     {{- end }}
-          replicas: {{ $infraCount | default 2) | toInt }}
+          replicas: {{ ($infraCount | default 2) | toInt }}
 ~~~
 
 When the policy is applied to the cluster, if there are zero infra nodes (`$infraCount == 0`) the whole block for the `spec.nodePlacement` will not be part of the IngressController configuration. Once infra nodes are added to the cluster the policy will reevaluate and the configuration will be updated.
@@ -186,7 +186,7 @@ spec:
       endpoint: %[2]s
       insecure: true
       access_key: %[3]s
-      secret_key: %[4]s
+      secret_key: %[4]s`
     }}
     {{- /* create the secret using the thanos configuration template created above. */ -}}
     - complianceType: mustonlyhave
